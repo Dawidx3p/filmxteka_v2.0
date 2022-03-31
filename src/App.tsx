@@ -11,7 +11,7 @@ function App() {
   const [response, setResponse] = useState('');
   
  const auth = new GoTrue({
-  APIUrl: 'https://filmxteka.tk/.netlify/identity',
+  APIUrl: 'https://filmxteka.ml/.netlify/identity',
   audience: '',
   setCookie: true,
 });
