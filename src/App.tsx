@@ -24,8 +24,8 @@ function App() {
           .then(response => {
             setResponse(JSON.stringify(response))
           })
-          .catch((error: string) => {
-            setResponse(error)
+          .catch((error) => {
+            setResponse(JSON.stringify(error))
           })
         }}>
           <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder='email' type="email" />
