@@ -1,0 +1,644 @@
+@import url('https://fonts.googleapis.com/css2?family=Hurricane&family=Merriweather&family=Mukta:wght@500;700&display=swap');
+
+
+/* 1. Zmienne
+======================================== */
+
+$font-family: 'Mukta', sans-serif;
+$font-family2: 'Hurricane', cursive;
+$font-family3: 'Merriweather', serif;
+$font-size: 16px;
+$small-text: 0.8rem;
+$margin: $font-size 0;
+$padding: 3rem;
+$padding2: 0.4rem 1.6rem;
+$padding3: 1rem;
+$gap: 0.8rem;
+$gap2: 4rem;
+$white: rgb(238, 238, 238);
+$grey: rgb(216, 216, 216);
+$dark: rgb(51, 51, 51);
+$dark-transparent: rgba(51, 51, 51, 0);
+$low-opacity: rgba(238, 238, 238, 0.845);
+$background-color: rgb(238, 238, 238);
+$background-color-transparent: rgba(238, 238, 238, 0);
+$color-primary: #963cbdff;
+$color-primary2:rgb(189, 60, 131);
+$color-secondary: #FF6F61FF;
+$color-secondary2: rgb(255, 192, 97);
+$warning-color: #ed254eff;
+$success-color: #2ABD79;
+$gradient2: linear-gradient(90deg, $color-primary2, $color-primary);
+$gradient: linear-gradient(90deg, $color-secondary, $color-primary2);
+$backdrop-filter: blur(2px);
+$box-shadow: 0 3px 7px -2px #333;
+$text-shadow: 0 3px 3px #333;
+$border-radius: 0.5rem;
+$max-width-screen: 850px;
+$max-width-screen2: 1300px;
+$thumbnail-content: 'Zobacz artykuł';
+$transition-duration: 0.2s;
+@mixin setupfont($size: 1rem, $weight: 300, $font: $font-family){
+    font-family: $font;
+    font-size: $size;
+    line-height: calc(1.2*$size);
+    margin-bottom: calc($size/3);
+    margin-top: calc($size/2);
+    font-weight: $weight;
+}
+
+@mixin fixed{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+
+/* 2. Globalne zmiany
+======================================== */
+
+html{
+    font-size: $font-size;
+    @media only screen and (max-width: $max-width-screen) {
+        &{
+            font-size: 14px;
+        }
+    }
+}
+
+
+body{
+    background-color: $background-color;
+}
+
+main{
+    padding: 4rem 15vw;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    align-items: baseline;
+    gap: $gap2;
+    @media only screen and (max-width: $max-width-screen2) {
+        &{
+            grid-template-columns: 2fr 1fr;
+            padding: 4rem 10vw;
+        }
+    }
+    @media only screen and (max-width: $max-width-screen) {
+        &{
+            grid-template-columns: 1fr;
+            padding: 4rem 10vw;
+        }
+    }
+}
+
+header{
+    background-size: cover;
+    background-position: center;
+    padding: 4rem 15vw;
+    gap: $gap2;
+    display: grid;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+footer{
+    display: grid;
+    min-height: 30vh;
+    justify-content: center;
+    align-items: center;
+}
+
+article{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+form{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    gap: $gap;
+    padding: $padding;
+    background-color: $background-color;
+    border-radius: 0.5rem;
+    box-shadow: $box-shadow;
+    justify-self: center;
+    margin: $margin;
+    input, textarea, select{
+        box-shadow: $box-shadow;
+        background-color: $grey;
+        padding: $padding2;
+        font-family: $font-family;
+        font-size: $font-size;
+        border: none;
+    }
+    
+    input[type=submit]{
+        background: $gradient;
+        color: $white;
+        text-transform: uppercase;
+        border-radius: 2rem;
+        cursor: pointer;
+        transition: $transition-duration;
+        &:hover{
+            filter:invert(100%)
+        }
+    }
+
+    input[type=checkbox]{
+        transform: scale(1.5);
+    }
+    
+    textarea{
+        resize: none;
+    }
+
+    span.error{
+        font-size: $small-text;
+        font-family: $font-family;
+        font-weight: 700;
+        color: $warning-color;
+    }
+    @media only screen and (max-width: $max-width-screen) {
+        &{
+            input, textarea, select{
+                font-size: calc($font-size*0.8);
+            }
+        }
+    }
+}
+
+a{
+    text-decoration: none;
+    color: $color-primary2;
+    transition: $transition-duration;
+    border-bottom: 1px solid transparent;
+    &:hover{
+        border-bottom: 1px solid $color-primary2;
+        filter:invert(100%)
+    }
+}
+
+button{
+    font-family: $font-family;
+    font-size: $font-size;
+    text-transform: uppercase;
+    padding: $padding2;
+    margin-bottom: calc($font-size/2);
+    margin-top: calc($font-size/3);
+    border: none;
+    cursor: pointer;
+    transition: $transition-duration;
+    &:hover{
+        filter:invert(100%)
+    }
+}
+
+h1{
+    @include setupfont($size: 3rem, $weight: 700);
+    text-transform: uppercase;
+}
+
+h2{
+    @include setupfont($size: 2rem, $weight: 300);
+    text-transform: uppercase;
+}
+
+h3{
+    @include setupfont($size: 2.5rem, $weight: 300);
+}
+
+h4{
+    @include setupfont($size: 1.5rem, $weight: 500);
+}
+
+p{
+    @include setupfont($size: 1rem, $weight: 400, $font: $font-family3);
+    line-height: 1.5rem;
+}
+
+
+/* 3. Klasy
+======================================== */
+
+
+nav.main{
+    display: flex;
+    align-items:flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    @include fixed;
+    background: linear-gradient(0deg, $low-opacity, $background-color);
+    backdrop-filter: $backdrop-filter;
+    z-index: 2;
+    ul{
+        align-items: flex-start;
+        display: flex;
+        flex-direction: row;
+        list-style: none;
+        font-family: $font-family;
+        font-size: $font-size;
+        li{
+            display: grid;
+            text-align: center;
+            margin: 0 0.5rem;
+            a{
+                padding: $padding2;
+                color: rgb(65, 56, 62);
+                font-size: $small-text;
+                &:hover{
+                    filter: none;
+                }
+            }
+        }
+    }
+    @media only screen and (max-width: $max-width-screen) {
+        &{
+            display: none;
+        }
+    }
+}
+
+nav.burger{
+    display: none;
+    z-index: 2;
+    @include fixed;
+    background: linear-gradient(0deg, $low-opacity, $background-color);
+    backdrop-filter: $backdrop-filter;
+    .container{
+        justify-self: right;
+        padding: 1rem 2rem;
+        width: 1.5rem;
+        cursor: pointer;
+    }
+    .container div{
+        padding: 0.2rem;
+        width: 100%;
+        border-bottom: 3px solid #333;
+        border-radius: 3px;
+    }
+    ul{
+        margin: 0;
+        padding: 0;
+        display: grid;
+        list-style: none;
+        li{
+            display: grid;
+        }
+        a{
+            padding: $padding3;
+            text-align: center;
+        }
+    }
+    @media only screen and (max-width: $max-width-screen) {
+        &{
+            display: grid;
+        }
+    }
+}
+
+.search-icon{
+    cursor: pointer;
+    padding: $padding2;
+}
+
+.search-results{
+    list-style: none;
+    display: grid;
+    align-items: flex-start;
+    position: fixed;
+    top: 100px;
+    right: 0;
+    li{
+        background-color: $background-color;
+        text-align: center;
+        padding: $padding2;
+        font-family: $font-family;
+    }
+}
+
+.form-inline{
+    background: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: unset;
+    transition-duration: $transition-duration;
+    border-radius: 0px;
+    input{
+        font-size: calc($font-size*0.8);
+        box-shadow: unset;
+        border-radius: 0px;
+    }
+}
+
+.photo-grid{
+    margin: $margin;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $gap;
+    align-items: center;
+    img{
+        margin: 0;
+        width: 100%;
+    }
+    .vertical{
+        grid-row-end: span 2;
+    }
+    @media only screen and (max-width: $max-width-screen) {
+        &{
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+/* By używać slidera potrzebny jest JS
+==> projekt joanna-blog
+======================================== */
+$slider-width: 600px;
+$slider-height: 300px;
+
+.slider{
+    justify-self: center;
+    overflow: hidden;
+    height: $slider-height;
+    transition: 1s;
+    width: $slider-width;
+    .container{
+        transition: 1s;
+        display: flex;
+        height: 100%;
+        width: 600%; // width uzależniony od ilości zdjęć
+        margin-left: -200%; // margin-left do przejścia między zdjęciami
+        img{
+            width: $slider-width;
+            height: 100%;
+            object-fit: cover;
+            margin: 0;
+        }
+    }
+    .controls{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: -2rem;
+        padding: 0;
+    }
+    @media only screen and (max-width: 1300px) {
+        &{
+            width: 500px;
+            img{
+                width: 500px;
+            }
+        }
+    }
+    @media only screen and (max-width: $max-width-screen) {
+        &{
+            width: 250px;
+            img{
+                width: 250px;
+            }
+        }
+    }
+}
+
+  .gallery{
+    @include fixed;
+    height: 100vh;
+    z-index: 10;
+    background-color: $background-color;
+    backdrop-filter: blur(2px);
+    display: grid;
+    grid-template-columns: 18fr 3fr;
+    justify-items: center;
+    align-items: center;
+    img{
+        max-height: 95vh;
+        max-width: 70vw;
+    }
+    nav.top{
+        position: absolute;
+        top: 0;
+        grid-column-end: span 2;
+        justify-self: flex-start;
+        z-index: 2;
+    }
+    nav.side{
+        justify-items: right;
+        right: 0;
+        width: 11rem;
+        position: absolute;
+        display: grid;
+        background: none;
+        backdrop-filter: none;
+        overflow: scroll;
+        max-height: 100vh;
+        gap: $gap;
+        z-index: 1;
+        img{
+            width: 85%;
+            height: 7rem;
+            object-fit: cover;
+            border: 2px solid transparent;
+            transition: $transition-duration;
+            cursor: pointer;
+            &.active{
+                width: 95%;
+                filter: drop-shadow(0px 0px 6px $color-primary);
+            }
+            &:hover{
+                filter: drop-shadow(0px 0px 4px $color-primary);
+            }
+        }
+    }
+    @media only screen and (max-width: $max-width-screen) {
+        &{
+            grid-template-columns: 1fr;
+        }
+        img{
+            max-height: 70vh;
+            max-width: 90vw;
+        }
+        nav.side{
+            display: inline-flex;
+            align-items: flex-end;
+            height: 100vh;
+            width: 100%;
+            img{
+                width: 100%;
+            }
+        }
+    }
+}
+
+.special-text{
+    @include setupfont($size: 2rem, $weight: 500, $font: $font-family2);
+    text-transform: uppercase;
+}
+
+section.text-2cols{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $gap;
+    @media only screen and (max-width: $max-width-screen) {
+        &{
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+.thumbnail, .big-thumbnail, .small-thumbnail{
+    background-position: center;
+    background-size: cover;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: $gap;
+    padding: $padding;
+    margin: $margin;
+    background-color: $background-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    transition: $transition-duration;
+    .container{
+        overflow: hidden;
+    }
+    h4{
+        margin-top: 0;
+    }
+    img{
+        width: 100%;
+        max-height: 40vh;
+        object-fit: contain;
+    }
+    nav{
+        grid-column-end: span 2;
+        display: grid;
+        a{
+            justify-self: flex-end;
+            font-family: $font-family;
+            font-size: $font-size;
+            color: $success-color;
+            text-transform: uppercase;
+            padding: $padding2;
+            padding-right: 0;
+            &:hover{
+                border-bottom: 1px solid $success-color;
+            }
+        }
+    }
+}
+
+.big-thumbnail{
+  padding: 0;
+  grid-template-columns: 1fr 1fr;
+  background: linear-gradient(90deg, $background-color 53%, $background-color-transparent);
+  transition: $transition-duration;
+  cursor: pointer;
+  .container{
+    padding: $padding;
+    display: grid;
+    span{
+        @include setupfont($size: 0.8rem);
+    }
+  }
+  img{
+    object-fit: cover;
+    height: 100%;
+    z-index: -3;
+    max-height: max-content;
+    border-radius: $border-radius;
+  }
+ &:hover{
+    color: $color-primary2;
+ }
+ @media only screen and (max-width: $max-width-screen) {
+    &{
+        grid-template-columns: 1fr;
+        img{
+            display: none;
+        }
+    }
+}
+}
+
+.small-thumbnail{
+    display: grid;
+    grid-template-columns: 1fr;
+    color: $white;
+    text-align: center;
+    .container {
+        h4, span{
+            text-shadow: $text-shadow;
+        }
+        span{
+            font-weight: 600;
+        }
+    }
+    
+}
+
+/* buttony
+======================================== */
+
+button.primary{
+    background: $gradient;
+    color: $white;
+}
+
+button.secondary{
+    background: $gradient2;
+    color: $white;
+}
+
+button.success{
+    background: $success-color;
+    color: $white;
+}
+
+button.warning{
+    background: $warning-color;
+    color: $white;
+}
+
+button.rounded{
+    border-radius: 2rem;
+}
+
+@mixin transparent-button($color: $color-primary){
+    background: none;
+    color: $color;
+    border: 3px solid $color;
+}
+
+button.transparent-primary{
+    @include transparent-button($color: $color-secondary);
+}
+
+button.transparent-secondary{
+    @include transparent-button($color: $color-primary);
+}
+
+button.transparent-success{
+    @include transparent-button($color: $success-color);
+}
+
+button.transparent-warning{
+    @include transparent-button($color: $warning-color);
+}
+
+/* koniec buttonów
+======================================== */
+
+nav .back{
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 1.2rem;
+    font-family: $font-family;
+    font-size: $font-size;
+    text-transform: uppercase;
+    align-self: center;
+}

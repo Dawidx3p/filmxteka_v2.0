@@ -1,23 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import './App.scss';
+import './MyTemplate.scss';
+import GoTrue from 'gotrue-js';
+
+// Instantiate the GoTrue auth client with an optional configuration
 
 function App() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [response, setResponse] = useState('');
+  
+ const auth = new GoTrue({
+  APIUrl: 'https://filmxteka.tk/.netlify/identity',
+  audience: '',
+  setCookie: true,
+});
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          auth.signup(email, password)
+          .then(response => {
+            setResponse(JSON.stringify(response))
+          })
+          .catch((error: string) => {
+            setResponse(error)
+          })
+        }}>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder='email' type="email" />
+          <input value={password}  onChange={(e) => setPassword(e.target.value)}  placeholder='password' type="password" />
+          <input type="submit" value="Log in"/>
+        </form>
+        <p>{response && response}</p>
       </header>
     </div>
   );
