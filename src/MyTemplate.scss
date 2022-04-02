@@ -583,27 +583,27 @@ section.text-2cols{
 /* buttony
 ======================================== */
 
-button.primary{
+button.primary, input[type='submit'].primary{
     background: $gradient;
     color: $white;
 }
 
-button.secondary{
+button.secondary, input[type='submit'].secondary{
     background: $gradient2;
     color: $white;
 }
 
-button.success{
+button.success, input[type='submit'].success{
     background: $success-color;
     color: $white;
 }
 
-button.warning{
+button.warning, input[type='submit'].warning{
     background: $warning-color;
     color: $white;
 }
 
-button.rounded{
+button.rounded, input[type='submit'].rounded{
     border-radius: 2rem;
 }
 
@@ -613,19 +613,19 @@ button.rounded{
     border: 3px solid $color;
 }
 
-button.transparent-primary{
+button.transparent-primary, input[type='submit'].transparent-primary{
     @include transparent-button($color: $color-secondary);
 }
 
-button.transparent-secondary{
+button.transparent-secondary, input[type='submit'].transparent-secondary{
     @include transparent-button($color: $color-primary);
 }
 
-button.transparent-success{
+button.transparent-success, input[type='submit'].transparent-success{
     @include transparent-button($color: $success-color);
 }
 
-button.transparent-warning{
+button.transparent-warning, input[type='submit'].transparent-warning{
     @include transparent-button($color: $warning-color);
 }
 

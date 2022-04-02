@@ -13,7 +13,7 @@ const Register = () => {
       });
 
     return(
-        <>
+        <header>
             <form onSubmit={(e) => {
                 e.preventDefault();
                 auth.signup(email, password)
@@ -29,7 +29,7 @@ const Register = () => {
                 <input type="submit" value="Register"/>
             </form>
             <p>{response && response}</p>
-        </>
+        </header>
     )
 }
 
