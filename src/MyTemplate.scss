@@ -7,14 +7,17 @@
 $font-family: 'Mukta', sans-serif;
 $font-family2: 'Hurricane', cursive;
 $font-family3: 'Merriweather', serif;
+
 $font-size: 16px;
 $small-text: 0.8rem;
+
 $margin: $font-size 0;
 $padding: 3rem;
 $padding2: 0.4rem 1.6rem;
 $padding3: 1rem;
 $gap: 0.8rem;
 $gap2: 4rem;
+
 $white: rgb(238, 238, 238);
 $grey: rgb(216, 216, 216);
 $dark: rgb(51, 51, 51);
@@ -30,14 +33,19 @@ $warning-color: #ed254eff;
 $success-color: #2ABD79;
 $gradient2: linear-gradient(90deg, $color-primary2, $color-primary);
 $gradient: linear-gradient(90deg, $color-secondary, $color-primary2);
+
 $backdrop-filter: blur(2px);
 $box-shadow: 0 3px 7px -2px #333;
 $text-shadow: 0 3px 3px #333;
 $border-radius: 0.5rem;
+
 $max-width-screen: 850px;
 $max-width-screen2: 1300px;
+
 $thumbnail-content: 'Zobacz artykuł';
+
 $transition-duration: 0.2s;
+
 @mixin setupfont($size: 1rem, $weight: 300, $font: $font-family){
     font-family: $font;
     font-size: $size;
@@ -52,6 +60,15 @@ $transition-duration: 0.2s;
     left: 0;
     top: 0;
     width: 100%;
+}
+
+@mixin disabled{
+    &:disabled{
+        background: rgb(179, 179, 179);
+        &:hover{
+            filter: none;
+        }
+    }
 }
 
 
@@ -95,12 +112,15 @@ main{
 header{
     background-size: cover;
     background-position: center;
-    padding: 4rem 15vw;
+    padding: 0 15vw;
     gap: $gap2;
     display: grid;
     min-height: 100vh;
     justify-content: center;
     align-items: center;
+    img{
+        width: 100%;
+    }
 }
 
 footer{
@@ -117,7 +137,9 @@ article{
 }
 
 form{
+    width: min-content;
     display: grid;
+    justify-self: center;
     justify-content: center;
     align-items: center;
     gap: $gap;
@@ -146,6 +168,12 @@ form{
         &:hover{
             filter:invert(100%)
         }
+        &:disabled{
+            background: rgb(179, 179, 179);
+            &:hover{
+                filter: none;
+            }
+        }
     }
 
     input[type=checkbox]{
@@ -156,11 +184,22 @@ form{
         resize: none;
     }
 
+    label{
+        font-family: $font-family;
+        font-size: calc($font-size*0.8);
+    }
+
     span.error{
         font-size: $small-text;
         font-family: $font-family;
         font-weight: 700;
         color: $warning-color;
+    }
+    a{
+        padding: $padding2;
+        font-family: $font-family;
+        font-size: $font-size;
+        text-align: center;
     }
     @media only screen and (max-width: $max-width-screen) {
         &{
@@ -195,6 +234,7 @@ button{
     &:hover{
         filter:invert(100%)
     }
+    @include disabled;
 }
 
 h1{
@@ -586,21 +626,25 @@ section.text-2cols{
 button.primary, input[type='submit'].primary{
     background: $gradient;
     color: $white;
+    @include disabled;
 }
 
 button.secondary, input[type='submit'].secondary{
     background: $gradient2;
     color: $white;
+    @include disabled;
 }
 
 button.success, input[type='submit'].success{
     background: $success-color;
     color: $white;
+    @include disabled;
 }
 
 button.warning, input[type='submit'].warning{
     background: $warning-color;
     color: $white;
+    @include disabled;
 }
 
 button.rounded, input[type='submit'].rounded{
@@ -608,6 +652,7 @@ button.rounded, input[type='submit'].rounded{
 }
 
 @mixin transparent-button($color: $color-primary){
+    @include disabled;
     background: none;
     color: $color;
     border: 3px solid $color;
@@ -615,18 +660,22 @@ button.rounded, input[type='submit'].rounded{
 
 button.transparent-primary, input[type='submit'].transparent-primary{
     @include transparent-button($color: $color-secondary);
+    @include disabled;
 }
 
 button.transparent-secondary, input[type='submit'].transparent-secondary{
     @include transparent-button($color: $color-primary);
+    @include disabled;
 }
 
 button.transparent-success, input[type='submit'].transparent-success{
     @include transparent-button($color: $success-color);
+    @include disabled;
 }
 
 button.transparent-warning, input[type='submit'].transparent-warning{
     @include transparent-button($color: $warning-color);
+    @include disabled;
 }
 
 /* koniec buttonów

@@ -1,37 +1,40 @@
+import GoTrue from "gotrue-js";
 import React, { useState } from "react";
-import GoTrue from 'gotrue-js';
 import { useNavigate } from "react-router-dom";
 
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
-const Register = () => {
+const Remind = () => {
     const navigate = useNavigate();
     const [isSubmitting, setSubmitting] = useState(false);
     const auth = new GoTrue({
         APIUrl: 'https://filmxteka.ml/.netlify/identity',
         audience: '',
         setCookie: true,
-      });
+    });
+    const user = auth.currentUser();
     type InitialValues = {
-        email: string,
         password: string
     }
     
     const onSubmit = (values: InitialValues ) => {
         setSubmitting(true)
-        auth.signup(values.email, values.password)
-        .then(response => {
-        console.log(JSON.stringify(response));
-        setSubmitting(false);
-        navigate('/');
-        })
-        .catch((error) => {
-        console.log(JSON.stringify(error))
-        })
+        if(user){
+            user
+            .update({email: user.email, password: values.password})
+            .then((user) => {
+                console.log('Updated user %s', user);
+                setSubmitting(false);
+                navigate('/');
+            })
+            .catch((error) => {
+                console.log('Failed to update user: %o', error);
+                throw error;
+            });
+        }
     }
     const initialValues = {
-        email: '',
         password: ''
     }
     return(
@@ -44,7 +47,7 @@ const Register = () => {
       })}
       onSubmit={onSubmit}
       >
-        {() => <header>
+        {() => <>
           <Form>
             <label htmlFor='email'>e-mail</label>
             <Field autoComplete="email" name="email" type="email"/>
@@ -56,12 +59,12 @@ const Register = () => {
             <ErrorMessage name="password">
               {msg => <span className="error">{msg}</span>}
             </ErrorMessage>
-            <Field name="submit" type="submit" value="Register" disabled={isSubmitting}/>
+            <Field name="submit" type="submit" value="Change Password" disabled={isSubmitting}/>
           </Form>
-        </header>}
+        </>}
       </Formik>
     </>
     )
 }
 
-export default Register;
+export default Remind;
