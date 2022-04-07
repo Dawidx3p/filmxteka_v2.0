@@ -1,29 +1,36 @@
-$gap: 1rem;
+$gap: 3rem;
+$small-gap: 1rem;
+
+.grid2{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
 
 .films-container{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: $gap;
-}
-
-.films-container img{
-    align-self: center;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.films-container h4{
-    text-align: center;
-}
-
-main{
-    grid-template-columns: 1fr;
+    gap: $small-gap;
+    img{
+        align-self: center;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    h4{
+        text-align: center;
+    }
 }
 
 .overview{
     display: grid;
     grid-template-columns: 5fr 4fr;
     gap: $gap;
-    align-items: center;
+    align-items: flex-start;
+    img{
+        width: 100%;
+    }
 }
+
+.formik{
+    width: auto;
+}
+

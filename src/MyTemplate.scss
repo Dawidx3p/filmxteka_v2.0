@@ -93,7 +93,7 @@ main{
     padding: 4rem 15vw;
     display: grid;
     grid-template-columns: 3fr 1fr;
-    align-items: baseline;
+    align-items: flex-start;
     gap: $gap2;
     @media only screen and (max-width: $max-width-screen2) {
         &{

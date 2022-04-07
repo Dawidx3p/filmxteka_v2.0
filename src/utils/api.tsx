@@ -1,12 +1,4 @@
-export type Comment = {
-  text: string,
-  author: {
-    name: string,
-    email: string
-  },
-  comments: Comment[]
-  date: string
-}
+import {Comment} from "./types";
 
 const createComment = async (comment:Comment) => fetch('/.netlify/functions/addComment', {
     body: JSON.stringify(comment),
@@ -21,7 +13,6 @@ const updateComment = async (comment:Comment, id:string) => fetch(`/.netlify/fun
   method: 'POST'
 })
 .then(response => response.json())
-.then((data: {ref: {"@ref": { id: string }}, data: Comment}) => data)
 .catch((error) => console.error(error));
 
 const getCommentsByFilm = async (id:string) => fetch(`/.netlify/functions/comments_by_film`, {
@@ -29,7 +20,6 @@ const getCommentsByFilm = async (id:string) => fetch(`/.netlify/functions/commen
   method: 'POST'
 })
 .then(response => response.json())
-.then((data: {ref: {"@ref": { id: string }}, data: Comment}) => data)
 .catch((error) => console.error(error));
 
 

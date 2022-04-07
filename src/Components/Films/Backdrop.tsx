@@ -7,17 +7,17 @@ type Props = {
     films: Film[]
 }
 
-const Films = (props:Props) => {
+const Backdrop = (props:Props) => {
     const {films} = props;
     const navigate = useNavigate();
 
     return(
         <>
         {films.map((film, key) => {
-            return <img onClick={() => navigate(`/film/${film.id}`)}  key={key} src={`https://image.tmdb.org/t/p/w500${film.poster_path}`} alt={film.title} /> 
+            return <img onClick={() => navigate(`/film/${film.id}`)}  key={key} src={`https://image.tmdb.org/t/p/w500${film.backdrop_path}`} alt={film.title} /> 
         })}
         </>
     )
 }
 
-export default Films;
+export default Backdrop;

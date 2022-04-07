@@ -1,43 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getOverview, Overview } from '../../utils/imdb';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Film as FilmType } from '../../utils/types';
+import AddComment from '../AddComment/AddComment';
 
-const Film = () => {
-    const initialState:Overview = {
-        genres: [], popularity: { currentRank: 0 }, ratings:{ rating: 0, ratingCount: 0 }, releaseDate: '', plotOutline: { id: '', text: '' }, 
-        plotSummary: { id: '', text: '' }, title:{ id: '', image:{ height: 0, width: 0, url: '' },
-            runningTimeInMinutes: 0, title: '', titleType: '', year: 0
-        }
-    }
-    const [overview, setOverview] = useState(initialState);
-    
+type Props = {
+    films: FilmType[];
+    trending: FilmType[];
+}
+
+const Film = ({films, trending}: Props) => {
+    const [film, setFilm] = useState<FilmType | undefined>(undefined);
+    const [isCommenting, setCommenting] = useState(false);
     const params = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if(params.filmId){
-            getOverview(params.filmId)
-            .then(result => {
-                if(result){
-                    setOverview(result)
-                }else{
-                    console.error('No Overview')
-                }
-            })
-            .catch((err) => console.error(err))
+        if(films.length){
+            setFilm(films.find(film => film.id===Number(params.filmId)) || trending.find(film => film.id===Number(params.filmId))) 
+        }else{
+            navigate('/')
         }
-    }, [params.filmId])
+        
+    },[films, trending, navigate, params.filmId])
 
     return (
-        <header>
-            <div className='overview'>
+            <main className='overview'>
                 <div className='overview-container'>
-                    <h1>{overview.title.title}</h1>
-                    <h4>{overview.plotOutline?.text}</h4>
-                    <p>{overview.plotSummary?.text}</p>
+                    <h1>{film?.title}</h1>
+                    <p>{film?.genre_ids.join(', ')}</p>
+                    <p>Release: {film?.release_date}</p>
+                    <h4>{film?.title}</h4>
+                    <p>{film?.overview}</p>
+                    {isCommenting ? <AddComment close={() => setCommenting(false)}/> : <button onClick={() => setCommenting(true)} className='primary'>Comment</button>}
                 </div>
-                <img alt='overview' src={overview.title.image.url} />
-            </div>
-        </header>
+                <img alt='overview' src={`${film? 'https://image.tmdb.org/t/p/w500/'+film.poster_path: ''}`} />
+            </main>
     )
 }
 
