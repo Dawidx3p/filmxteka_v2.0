@@ -28,40 +28,20 @@ export type Data = {
 	video: boolean;
 	vote_average: number;
 	vote_count: number;
+	media_type?: string;
 }
 
-export interface Overview{
-	genres: string[];
-	popularity: {
-		currentRank: number;
-	};
-	ratings:{
-		rating: number;
-		ratingCount: number;
-	};
-	releaseDate: string;
-	plotOutline?: {
-		id: string;
-		text: string;
-	}
-	plotSummary?: {
-		id: string;
-		text: string;
-	}
-	title:{
-		id: string;
-		image:{
-			height: number;
-			width: number;
-			url: string;
-		};
-		runningTimeInMinutes: number;
-		title: string;
-		titleType: string;
-		year: number;
-	};
+export interface Video{
+	iso_639_1: string;
+	iso_3166_1: string;
+	name: string;
+	key: string;
+	site: string;
+	size: number;
+	type: string;
+	official: boolean;
+	published_at: string;
+	id: string;
 }
 
-export interface Films {
-	results: Film[]
-};
+export interface Genre {id: number; name: string}

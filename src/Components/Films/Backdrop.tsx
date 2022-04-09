@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {Film} from '../../utils/types';
 
 type Props = {
-    films: Film[]
+    films: {day: Film[], week: Film[]}
 }
 
 const Backdrop = (props:Props) => {
@@ -13,7 +13,7 @@ const Backdrop = (props:Props) => {
 
     return(
         <>
-        {films.map((film, key) => {
+        {films.week.map((film, key) => {
             return <img onClick={() => navigate(`/film/${film.id}`)}  key={key} src={`https://image.tmdb.org/t/p/w500${film.backdrop_path}`} alt={film.title} /> 
         })}
         </>

@@ -67,12 +67,12 @@ const Login = () => {
                 auth.requestPasswordRecovery(values.email)
                 .then(response => {
                 console.log(JSON.stringify(response));
-                navigate('/')
+                navigate('/login')
                 })
                 .catch((error) => {
                 console.log(JSON.stringify(error))
                 })
-            }} href="/">Remind password</a>
+            }} href="/login">Remind password</a>
           </Form>
         </>}
       </Formik>

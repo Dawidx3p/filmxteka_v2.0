@@ -1,9 +1,8 @@
 import GoTrue from 'gotrue-js';
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 const Navigation = () => {
-    const [loggingOut, setLogout] = useState(false);
 
     const navigate = useNavigate();
     
@@ -14,14 +13,12 @@ const Navigation = () => {
     });
     
     const logout = () => {
-        setLogout(true);
         const user = auth.currentUser();
         if(user){
             user
         .logout()
         .then(response => {
             console.log("User logged out");
-            setLogout(false);
             navigate('/');
         })
         .catch(error => {
@@ -35,7 +32,14 @@ const Navigation = () => {
         <nav className="main">
             <ul>
                 <li><NavLink to='/'>Homepage</NavLink></li>
-                <button disabled={loggingOut} className="warning" onClick={logout}>logout</button>
+                <li>
+                    <NavLink 
+                    onClick={(e) => {
+                        e.preventDefault();
+                        logout();
+                    }} 
+                    to='/'>Logout</NavLink>
+                </li>
             </ul>
 
         </nav>

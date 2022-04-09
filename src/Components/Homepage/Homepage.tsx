@@ -1,5 +1,4 @@
 import GoTrue from "gotrue-js";
-import Login from "../Login/Login";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -13,7 +12,7 @@ import Backdrop from "../Films/Backdrop";
 
 type Props = {
     films: Film[];
-    trending: Film[]
+    trending: {day: Film[], week: Film[]}
 }
 
 const Homepage = ({films, trending}:Props) => {
@@ -45,19 +44,25 @@ const Homepage = ({films, trending}:Props) => {
                 navigate('/remind');
             })
             .catch((error) => console.log('Failed to verify recover token: %o', error));
+        }else if(!auth.currentUser()){
+            navigate('/login')
         }
     })
 
     return(
         <>
-        {auth.currentUser() ? <main>
+        <main>
             <div className='films-container grid2'>
+            <h1>The Most Popular</h1>
                 <Films films={films}/>
             </div>
             <div className='films-container'>
+                <h2>Trending</h2>
+                <div><button>day</button><button>week</button></div>
                 <Backdrop films={trending}/>
             </div>
-            </main> : <Login />}
+        </main>
+
         <button onClick={() => {
             getCommentsByFilm('poziomka')
             .then((comments:Comment[]|void) => {
