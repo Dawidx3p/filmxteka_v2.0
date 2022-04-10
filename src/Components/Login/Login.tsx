@@ -35,9 +35,13 @@ const Login = () => {
       setSubmitting(false)
       navigate('/homepage')
     })
-    .catch((error:{name:string,status:number,json:{error:string,error_description:string}}) => {
+    .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
       setSubmitting(false)
-      setMessage(error.json.error_description)
+      if(error.json.error_description){
+        setMessage(error.json.error_description)
+      }else if((error.json.msg)){
+        setMessage(error.json.msg)
+      }
     })
   }
 
@@ -48,18 +52,26 @@ const Login = () => {
         .then(() => {
             setMessage('Your email address has been successfully confirmed')
         })
-        .catch((error:{name:string,status:number,json:{code:number,msg:string}}) => {
-          setMessage(error.json.msg)
-        });
+        .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
+          if(error.json.error_description){
+            setMessage(error.json.error_description)
+          }else if((error.json.msg)){
+            setMessage(error.json.msg)
+          }
+        })
     }else if(location.hash.includes('recovery_token')){
         auth
         .recover(location.hash.slice(16), true)
         .then((response) => {
             navigate('/remind');
         })
-        .catch((error:{name:string,status:number,json:{code:number,msg:string}}) => {
-          setMessage(error.json.msg)
-        });
+        .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
+          if(error.json.error_description){
+            setMessage(error.json.error_description)
+          }else if((error.json.msg)){
+            setMessage(error.json.msg)
+          }
+        })
     }
   })
   return(
@@ -97,8 +109,12 @@ const Login = () => {
               setMessage('Request sent successfully')
               navigate('/')
               })
-              .catch((error:{name:string,status:number,json:{code:number,msg:string}}) => {
-              setMessage(error.json.msg)
+              .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
+                if(error.json.error_description){
+                  setMessage(error.json.error_description)
+                }else if((error.json.msg)){
+                  setMessage(error.json.msg)
+                }
               })
           }} href="/login">Remind password</a>
           <div>{message}</div>

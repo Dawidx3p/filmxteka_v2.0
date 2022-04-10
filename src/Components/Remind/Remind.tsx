@@ -6,8 +6,11 @@ import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
 const Remind = () => {
-    const navigate = useNavigate();
     const [isSubmitting, setSubmitting] = useState(false);
+    const [message, setMessage] = useState('');
+
+    const navigate = useNavigate();
+    
     const auth = new GoTrue({
         APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
         audience: '',
@@ -28,10 +31,14 @@ const Remind = () => {
                 setSubmitting(false);
                 navigate('/');
             })
-            .catch((error) => {
-                console.log('Failed to update user: %o', error);
-                throw error;
-            });
+            .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
+              setSubmitting(false)
+              if(error.json.error_description){
+                setMessage(error.json.error_description)
+              }else if((error.json.msg)){
+                setMessage(error.json.msg)
+              }
+            })
         }
     }
     const initialValues = {

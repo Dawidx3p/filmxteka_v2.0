@@ -24,9 +24,13 @@ const Register = () => {
         setMessage('signup confirmation sent')
         setSubmitting(false);
         })
-        .catch((error:{name:string,status:number,json:{code:number,msg:string}}) => {
+        .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
           setSubmitting(false)
-          setMessage(error.json.msg)
+          if(error.json.error_description){
+            setMessage(error.json.error_description)
+          }else if((error.json.msg)){
+            setMessage(error.json.msg)
+          }
         })
     }
     const initialValues = {
