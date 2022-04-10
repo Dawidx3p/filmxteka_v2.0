@@ -20,7 +20,7 @@ const Homepage = ({films, trending}:Props) => {
     const location = useLocation();
 
     const auth = new GoTrue({
-        APIUrl: 'https://filmxteka.ml/.netlify/identity',
+        APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
         audience: '',
         setCookie: true,
     });

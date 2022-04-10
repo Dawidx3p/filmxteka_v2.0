@@ -9,7 +9,7 @@ const Remind = () => {
     const navigate = useNavigate();
     const [isSubmitting, setSubmitting] = useState(false);
     const auth = new GoTrue({
-        APIUrl: 'https://filmxteka.ml/.netlify/identity',
+        APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
         audience: '',
         setCookie: true,
     });

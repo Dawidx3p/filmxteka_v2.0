@@ -24,7 +24,7 @@ const Film = ({films, trending, genres}: Props) => {
     const navigate = useNavigate();
 
     const auth = new GoTrue({
-        APIUrl: 'https://filmxteka.ml/.netlify/identity',
+        APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
         audience: '',
         setCookie: true,
     });

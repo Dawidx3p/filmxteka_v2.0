@@ -21,7 +21,7 @@ const AddComment = (props: Props) => {
 
     const auth = useMemo(() => {
         return new GoTrue({
-            APIUrl: 'https://filmxteka.ml/.netlify/identity',
+            APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
             audience: '',
             setCookie: true,
         })
