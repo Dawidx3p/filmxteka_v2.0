@@ -10,7 +10,7 @@ const Remind = () => {
     const [message, setMessage] = useState('');
 
     const navigate = useNavigate();
-    
+
     const auth = new GoTrue({
         APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
         audience: '',
@@ -67,6 +67,7 @@ const Remind = () => {
               {msg => <span className="error">{msg}</span>}
             </ErrorMessage>
             <Field name="submit" type="submit" value="Change Password" disabled={isSubmitting}/>
+            {message}
           </Form>
         </>}
       </Formik>
