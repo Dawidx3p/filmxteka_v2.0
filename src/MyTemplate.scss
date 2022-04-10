@@ -137,17 +137,14 @@ article{
 }
 
 form{
-    width: min-content;
     display: grid;
     justify-self: center;
-    justify-content: center;
     align-items: center;
     gap: $gap;
     padding: $padding;
     background-color: $background-color;
     border-radius: 0.5rem;
     box-shadow: $box-shadow;
-    justify-self: center;
     margin: $margin;
     input, textarea, select{
         box-shadow: $box-shadow;

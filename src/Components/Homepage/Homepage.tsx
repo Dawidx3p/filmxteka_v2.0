@@ -1,10 +1,8 @@
 import GoTrue from "gotrue-js";
 
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { getCommentsByFilm } from "../../utils/api";
-import {Comment} from "../../utils/types";
 import Films from "../Films/Films";
 
 import { Film } from "../../utils/types";
@@ -12,10 +10,11 @@ import Backdrop from "../Films/Backdrop";
 
 type Props = {
     films: Film[];
-    trending: {day: Film[], week: Film[]}
+    trending: { [trending: string]: Film[], day: Film[], week: Film[]}
 }
 
 const Homepage = ({films, trending}:Props) => {
+    const [trendingState, setTrending] = useState('day')
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -58,20 +57,10 @@ const Homepage = ({films, trending}:Props) => {
             </div>
             <div className='films-container'>
                 <h2>Trending</h2>
-                <div><button>day</button><button>week</button></div>
-                <Backdrop films={trending}/>
+                <div><button className={`${trendingState==='day'?'active':''}`} onClick={() => setTrending('day')}>day</button><button  className={`${trendingState==='week'?'active':''}`} onClick={() => setTrending('week')}>week</button></div>
+                <Backdrop films={trending[trendingState]}/>
             </div>
         </main>
-
-        <button onClick={() => {
-            getCommentsByFilm('poziomka')
-            .then((comments:Comment[]|void) => {
-                if(comments) {
-                    console.log(comments[0].data.text)
-                }
-            })
-            .catch(error => console.log(error))
-        }}>Get Comments for the film</button>
         </>
     )
 }

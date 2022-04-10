@@ -26,8 +26,8 @@ function App() {
     .then((values: {results: FilmType[]}[]) => {
       console.log(values)
       setFilms(values[0].results)
-      setTrending(prev => ({...prev, day: values[1].results}))
-      setTrending(prev => ({...prev, week: values[2].results}))
+      setTrending(prev => ({...prev, week: values[1].results}))
+      setTrending(prev => ({...prev, day: values[2].results}))
     })
     .catch(err => console.log(err));
     

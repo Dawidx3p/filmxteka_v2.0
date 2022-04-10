@@ -1,15 +1,17 @@
 export type Data = {
-    text: string,
+    text: string;
     author: {
-      name: string,
-      email: string
+      name?: string;
+      email: string;
     },
-    comments: Data[]
-    date: string
+	filmId: number;
+    comments?: Data[];
+    createdAt?: string;
+	lastModified: string;
   }
   
   export type Comment = {
-    ref: {"@ref": { id: string }},
+    ref?: {"@ref": { id: string }},
     data: Data
   }
 

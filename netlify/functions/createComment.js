@@ -12,7 +12,7 @@ exports.handler = (event, context) => {
   return client.query(
     q.Create(
       q.Collection('comments'),
-      { data: {...data, comments: []} }
+      { ...data }
     )
   )
   .then(response => {

@@ -15,7 +15,7 @@ export async function getTrendingWeek(){
 }
 
 export async function getTrendingDay(){
-	return fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=${apiKey}`)
+	return fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${apiKey}`)
 	.then(response => response.json())
 	.catch(err => console.error(err));
 }

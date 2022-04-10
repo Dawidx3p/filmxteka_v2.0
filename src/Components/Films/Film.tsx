@@ -1,8 +1,9 @@
 import GoTrue from 'gotrue-js';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getCommentsByFilm } from '../../utils/api';
 import { getVideos } from '../../utils/tmdb';
-import { Film as FilmType, Genre, Video } from '../../utils/types';
+import { Comment, Film as FilmType, Genre, Video } from '../../utils/types';
 import AddComment from '../AddComment/AddComment';
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 const Film = ({films, trending, genres}: Props) => {
     const [isCommenting, setCommenting] = useState(false);
     const [videos, setVideos] = useState<Video[] | undefined>(undefined);
+    const [comments, setComments] = useState<Comment[] | undefined>(undefined)
 
     const params = useParams();
     const navigate = useNavigate();
@@ -28,12 +30,36 @@ const Film = ({films, trending, genres}: Props) => {
     });
 
     const film = useMemo(() => {
-        return films.find(film => film.id===Number(params.filmId)) || trending.day.find(film => film.id===Number(params.filmId))|| trending.week.find(film => film.id===Number(params.filmId))
+        return films.find(film => film.id===Number(params.filmId)) || 
+        trending.day.find(film => film.id===Number(params.filmId)) || 
+        trending.week.find(film => film.id===Number(params.filmId))
     },[films, trending, params.filmId])
+
+    const addCommentToState = (comment: Comment) => {
+        setComments(prev => {
+            if(prev){
+                return [...prev, comment]
+            }else{
+                return [comment]
+            }
+        })
+    }
+
+    const updateCommentInState = (comment: Comment) => {
+        setComments(prev => {
+            if(prev){
+                return prev.map(prevComment => prevComment.ref?.['@ref'].id === comment.ref?.['@ref'].id ? comment : prevComment)
+            }else{
+                return []
+            }
+        })
+    }
 
     useEffect(() => {
         getVideos(params.filmId||'')
-        .then((videos: {results: Video[]}) => setVideos(videos.results))
+        .then((videos: {results: Video[]}) => setVideos(videos.results));
+        getCommentsByFilm(parseInt(params.filmId||'0'))
+        .then((comments: Comment[]) => setComments(comments))
     },[params.filmId])
 
     useEffect(() => {
@@ -57,8 +83,6 @@ const Film = ({films, trending, genres}: Props) => {
                     <p>Release: {film?.release_date || 'Unknown'}</p>
                     <h4>{film?.title}</h4>
                     <p>{film?.overview}</p>
-                    {}
-                    {isCommenting ? <AddComment close={() => setCommenting(false)}/> : <button onClick={() => setCommenting(true)} className='primary'>Comment</button>}
                 </div>
                 <img alt='overview' src={`${film? 'https://image.tmdb.org/t/p/w500/'+film.poster_path: ''}`} />
                 <div className='video-container'>
@@ -70,6 +94,24 @@ const Film = ({films, trending, genres}: Props) => {
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowFullScreen>
                         </iframe>
+                    })}
+                </div>
+                {isCommenting ? 
+                <AddComment 
+                comments={comments} 
+                filmId={film?.id||0} 
+                close={() => setCommenting(false)} 
+                addComment={addCommentToState}
+                updateCommentInState={updateCommentInState}/> : 
+                <button onClick={() => setCommenting(true)} className='primary'>Review</button>}
+                <div>
+                    {comments?.map((comment, key) => {
+                        return (
+                            <div key={key}>
+                                <h4>{comment.data.author.name||comment.data.author.email}</h4>
+                                <p>{comment.data.text}</p>
+                            </div>
+                        )
                     })}
                 </div>
             </main>
