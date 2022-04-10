@@ -15,7 +15,7 @@ import Login from './Components/Login/Login';
 function App() {
   const initialFilms: FilmType[] | [] = [];
   const initialGenres: Genre[] | [] = [];
-  
+
   const [films, setFilms] = useState(initialFilms);
   const [trending, setTrending] = useState({day: initialFilms, week: initialFilms});
   const [genres, setGenres] = useState({movie: initialGenres, tv: initialGenres})
@@ -45,16 +45,14 @@ function App() {
       <BrowserRouter>
         <Navigation />
         <Routes>
-          <Route path='/' element={<Homepage films={films} trending={trending}/>}/>
+          <Route path='/' element={<Login />}/>
+          <Route path='/homepage' element={<Homepage films={films} trending={trending}/>}/>
           <Route path='/film/:filmId' element={<Film films={films} trending={trending} genres={genres}/>}/>
           <Route path='/register' element={<Register />}/>
-          <Route path='/login' element={<Login />}/>
           <Route path='/remind' element={<Remind />}/>
-          <Route path='*'  element={<Homepage films={films} trending={trending}/>}/>
+          <Route path='*' element={<Homepage films={films} trending={trending}/>}/>
         </Routes>
-
       </BrowserRouter>
-
     </div>
   );
 }

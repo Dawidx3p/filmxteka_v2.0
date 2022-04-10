@@ -44,7 +44,7 @@ const Homepage = ({films, trending}:Props) => {
             })
             .catch((error) => console.log('Failed to verify recover token: %o', error));
         }else if(!auth.currentUser()){
-            navigate('/login')
+            navigate('/')
         }
     })
 

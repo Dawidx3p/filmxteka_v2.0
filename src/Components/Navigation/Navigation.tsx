@@ -31,7 +31,7 @@ const Navigation = () => {
     return(
         <nav className="main">
             <ul>
-                <li><NavLink to='/'>Homepage</NavLink></li>
+                <li><NavLink to='/homepage'>Homepage</NavLink></li>
                 <li>
                     <NavLink 
                     onClick={(e) => {

@@ -24,7 +24,7 @@ const Login = () => {
         .then(response => {
         console.log(JSON.stringify(response));
         setSubmitting(false)
-        navigate('/')
+        navigate('/homepage')
         })
         .catch((error) => {
         setSubmitting(false)
