@@ -8,6 +8,7 @@ import * as yup from 'yup'
 const Login = () => {
     const navigate = useNavigate();
     const [isSubmitting, setSubmitting] = useState(false);
+    const [message, setMessage] = useState('');
     const auth = new GoTrue({
         APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
         audience: '',
@@ -22,13 +23,13 @@ const Login = () => {
         setSubmitting(true)
         auth.login(values.email, values.password)
         .then(response => {
-        console.log(JSON.stringify(response));
+        setMessage('Logged in successfully')
         setSubmitting(false)
         navigate('/homepage')
         })
-        .catch((error) => {
+        .catch((error: {name: string, status: number, data: string}) => {
         setSubmitting(false)
-        console.log(JSON.stringify(error))
+        setMessage(error.data)
         })
     }
     const initialValues = {
@@ -73,6 +74,7 @@ const Login = () => {
                 console.log(JSON.stringify(error))
                 })
             }} href="/login">Remind password</a>
+            <div>{message}</div>
           </Form>
         </>}
       </Formik>

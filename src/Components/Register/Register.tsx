@@ -8,6 +8,7 @@ import * as yup from 'yup'
 const Register = () => {
     const navigate = useNavigate();
     const [isSubmitting, setSubmitting] = useState(false);
+    const [message, setMessage] = useState('');
     const auth = new GoTrue({
         APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
         audience: '',
@@ -26,8 +27,9 @@ const Register = () => {
         setSubmitting(false);
         navigate('/');
         })
-        .catch((error) => {
-        console.log(JSON.stringify(error))
+        .catch((error: {name: string, status: number, data: string}) => {
+          setSubmitting(false)
+          setMessage(error.data)
         })
     }
     const initialValues = {
@@ -57,6 +59,7 @@ const Register = () => {
               {msg => <span className="error">{msg}</span>}
             </ErrorMessage>
             <Field name="submit" type="submit" value="Register" disabled={isSubmitting}/>
+            {message}
           </Form>
         </header>}
       </Formik>
