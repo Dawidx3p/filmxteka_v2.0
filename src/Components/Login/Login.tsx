@@ -31,13 +31,13 @@ const Login = () => {
     setSubmitting(true)
     auth.login(values.email, values.password)
     .then(response => {
-    setMessage('Logged in successfully')
-    setSubmitting(false)
-    navigate('/homepage')
+      setMessage('Logged in successfully')
+      setSubmitting(false)
+      navigate('/homepage')
     })
-    .catch((error: {name: string, status: number, data: string}) => {
-    setSubmitting(false)
-    setMessage(error.data)
+    .catch((error:{name:string,status:number,json:{error:string,error_description:string}}) => {
+      setSubmitting(false)
+      setMessage(error.json.error_description)
     })
   }
 
@@ -45,20 +45,21 @@ const Login = () => {
     if(location.hash.includes('confirmation_token')){
         auth
         .confirm(location.hash.slice(20), true)
-        .then((response) => {
-            console.log('Confirmation email sent', JSON.stringify({ response }));
+        .then(() => {
+            setMessage('Your email address has been successfully confirmed')
         })
-        .catch((error) => {
-            console.log(error);
+        .catch((error:{name:string,status:number,json:{code:number,msg:string}}) => {
+          setMessage(error.json.msg)
         });
     }else if(location.hash.includes('recovery_token')){
         auth
         .recover(location.hash.slice(16), true)
         .then((response) => {
-            console.log('Logged in as %s', JSON.stringify({ response }))
             navigate('/remind');
         })
-        .catch((error) => console.log('Failed to verify recover token: %o', error));
+        .catch((error:{name:string,status:number,json:{code:number,msg:string}}) => {
+          setMessage(error.json.msg)
+        });
     }
   })
   return(
@@ -93,17 +94,17 @@ const Login = () => {
               auth.requestPasswordRecovery(values.email)
               .then(response => {
               console.log(JSON.stringify(response));
-              navigate('/login')
+              setMessage('Request sent successfully')
+              navigate('/')
               })
-              .catch((error) => {
-              console.log(JSON.stringify(error))
+              .catch((error:{name:string,status:number,json:{code:number,msg:string}}) => {
+              setMessage(error.json.msg)
               })
           }} href="/login">Remind password</a>
           <div>{message}</div>
         </Form>
       </>}
     </Formik>
-      <button onClick={() => console.log('user' + JSON.stringify(auth.currentUser()))}>Get user</button>
   </header>
   )
 }

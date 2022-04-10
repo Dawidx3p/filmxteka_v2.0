@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import GoTrue from 'gotrue-js';
-import { useNavigate } from "react-router-dom";
 
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
 const Register = () => {
-    const navigate = useNavigate();
     const [isSubmitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState('');
     const auth = new GoTrue({
@@ -22,14 +20,13 @@ const Register = () => {
     const onSubmit = (values: InitialValues ) => {
         setSubmitting(true)
         auth.signup(values.email, values.password)
-        .then(response => {
-        console.log(JSON.stringify(response));
+        .then(() => {
+        setMessage('signup confirmation sent')
         setSubmitting(false);
-        navigate('/');
         })
-        .catch((error: {name: string, status: number, data: string}) => {
+        .catch((error:{name:string,status:number,json:{code:number,msg:string}}) => {
           setSubmitting(false)
-          setMessage(error.data)
+          setMessage(error.json.msg)
         })
     }
     const initialValues = {
