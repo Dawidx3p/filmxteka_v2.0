@@ -50,9 +50,11 @@ $small-gap: 1rem;
         width: 100%;
         height: 20rem;
     }
-    &{
-        grid-template-columns: 1fr;
-        grid-column-end:auto;
+    @media only screen and (max-width: t.$max-width-screen) {
+        &{
+            grid-column-end:auto;
+            grid-template-columns: 1fr;
+        }
     }
 }
 
