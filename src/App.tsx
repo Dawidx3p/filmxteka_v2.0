@@ -16,6 +16,11 @@ function App() {
   const initialFilms: FilmType[] | [] = [];
   const initialGenres: Genre[] | [] = [];
 
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const login = () => setLoggedIn(true);
+  const logout = () => setLoggedIn(false);
+
   const [films, setFilms] = useState(initialFilms);
   const [trending, setTrending] = useState({day: initialFilms, week: initialFilms});
   const [genres, setGenres] = useState({movie: initialGenres, tv: initialGenres})
@@ -43,9 +48,9 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navigation />
+        <Navigation logout={logout} loggedIn={loggedIn}/>
         <Routes>
-          <Route path='/' element={<Login />}/>
+          <Route path='/' element={<Login login={login}/>}/>
           <Route path='/homepage' element={<Homepage films={films} trending={trending}/>}/>
           <Route path='/film/:filmId' element={<Film films={films} trending={trending} genres={genres}/>}/>
           <Route path='/register' element={<Register />}/>

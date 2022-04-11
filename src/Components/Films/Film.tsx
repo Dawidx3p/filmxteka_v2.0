@@ -1,10 +1,11 @@
 import GoTrue from 'gotrue-js';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getCommentsByFilm } from '../../utils/api';
 import { getVideos } from '../../utils/tmdb';
 import { Comment, Film as FilmType, Genre, Video } from '../../utils/types';
 import AddComment from '../AddComment/AddComment';
+import Popup from '../Popup/Popup';
 
 type Props = {
     films: FilmType[];
@@ -19,9 +20,9 @@ const Film = ({films, trending, genres}: Props) => {
     const [isCommenting, setCommenting] = useState(false);
     const [videos, setVideos] = useState<Video[] | undefined>(undefined);
     const [comments, setComments] = useState<Comment[] | undefined>(undefined)
+    const [popUpOpener, setOpener] = useState(false);
 
     const params = useParams();
-    const navigate = useNavigate();
 
     const auth = new GoTrue({
         APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
@@ -55,6 +56,8 @@ const Film = ({films, trending, genres}: Props) => {
         })
     }
 
+    const closePopup = () => setOpener(false);
+
     useEffect(() => {
         getVideos(params.filmId||'')
         .then((videos: {results: Video[]}) => setVideos(videos.results));
@@ -62,11 +65,6 @@ const Film = ({films, trending, genres}: Props) => {
         .then((comments: Comment[]) => setComments(comments))
     },[params.filmId])
 
-    useEffect(() => {
-        if(!auth.currentUser()){
-            navigate('/')
-        }
-    })
 
     return (
             <main className='overview'>
@@ -96,6 +94,7 @@ const Film = ({films, trending, genres}: Props) => {
                         </iframe>
                     })}
                 </div>
+                {popUpOpener && <Popup close={closePopup}/>}
                 {isCommenting ? 
                 <AddComment 
                 comments={comments} 
@@ -103,7 +102,13 @@ const Film = ({films, trending, genres}: Props) => {
                 close={() => setCommenting(false)} 
                 addComment={addCommentToState}
                 updateCommentInState={updateCommentInState}/> : 
-                <button onClick={() => setCommenting(true)} className='primary'>Review</button>}
+                <button onClick={() => {
+                    if(auth.currentUser()){
+                        setCommenting(true);
+                    }else{
+                        setOpener(true);
+                    }
+                }} className='primary'>Review</button>}
                 <div>
                     {comments?.map((comment, key) => {
                         return (

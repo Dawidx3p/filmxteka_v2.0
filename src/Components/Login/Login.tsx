@@ -1,11 +1,26 @@
 import GoTrue from "gotrue-js";
 import React, { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
-const Login = () => {
+type Props = {
+  login: () => void;
+}
+
+type Error = {
+  name:string,
+  status:number,
+  json: {
+    error?:string,
+    error_description?:string,
+    code?:number,
+    msg?:string
+  }
+}
+
+const Login = (props:Props) => {
   const [isSubmitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -31,16 +46,19 @@ const Login = () => {
     setSubmitting(true)
     auth.login(values.email, values.password)
     .then(response => {
-      setMessage('Logged in successfully')
-      setSubmitting(false)
-      navigate('/homepage')
+      setMessage('Logged in successfully');
+      setSubmitting(false);
+      props.login();
+      navigate('/homepage');
     })
-    .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
+    .catch((error:Error) => {
       setSubmitting(false)
       if(error.json.error_description){
         setMessage(error.json.error_description)
       }else if((error.json.msg)){
         setMessage(error.json.msg)
+      }else{
+        setMessage('something went wrong')
       }
     })
   }
@@ -50,26 +68,32 @@ const Login = () => {
         auth
         .confirm(location.hash.slice(20), true)
         .then(() => {
-            setMessage('Your email address has been successfully confirmed')
+            setMessage('Your email address has been successfully confirmed');
+            props.login();
         })
-        .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
+        .catch((error:Error) => {
           if(error.json.error_description){
             setMessage(error.json.error_description)
           }else if((error.json.msg)){
             setMessage(error.json.msg)
+          }else{
+            setMessage('something went wrong')
           }
         })
     }else if(location.hash.includes('recovery_token')){
         auth
         .recover(location.hash.slice(16), true)
         .then((response) => {
-            navigate('/remind');
+          props.login();
+          navigate('/remind');
         })
-        .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
+        .catch((error:Error) => {
           if(error.json.error_description){
             setMessage(error.json.error_description)
           }else if((error.json.msg)){
             setMessage(error.json.msg)
+          }else{
+            setMessage('something went wrong')
           }
         })
     }
@@ -109,14 +133,17 @@ const Login = () => {
               setMessage('Request sent successfully')
               navigate('/')
               })
-              .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
+              .catch((error:Error) => {
                 if(error.json.error_description){
                   setMessage(error.json.error_description)
                 }else if((error.json.msg)){
                   setMessage(error.json.msg)
+                }else{
+                  setMessage('something went wrong')
                 }
               })
           }} href="/login">Remind password</a>
+          <Link to="/homepage">Guest session</Link>
           <div>{message}</div>
         </Form>
       </>}

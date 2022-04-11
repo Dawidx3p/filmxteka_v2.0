@@ -2,7 +2,12 @@ import GoTrue from 'gotrue-js';
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
-const Navigation = () => {
+type Props = {
+    logout: () => void;
+    loggedIn: boolean;
+}
+
+const Navigation = (props:Props) => {
 
     const navigate = useNavigate();
     
@@ -36,9 +41,14 @@ const Navigation = () => {
                     <NavLink 
                     onClick={(e) => {
                         e.preventDefault();
-                        logout();
+                        if(props.loggedIn){
+                            props.logout();
+                            logout();
+                        }else{
+                            navigate('/')
+                        }
                     }} 
-                    to='/'>Logout</NavLink>
+                    to='/'>{props.loggedIn ? 'Logout' : 'Login'}</NavLink>
                 </li>
             </ul>
 

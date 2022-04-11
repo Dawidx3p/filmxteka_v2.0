@@ -39,6 +39,9 @@ const Remind = () => {
                 setMessage(error.json.msg)
               }
             })
+        }else{
+          setMessage('You are not logged in.')
+          setSubmitting(false)
         }
     }
     const initialValues = {
@@ -49,19 +52,13 @@ const Remind = () => {
         <Formik 
       initialValues={initialValues}
       validationSchema={yup.object({
-        email: yup.string().required('Required'),
         password: yup.string().required('Required')
       })}
       onSubmit={onSubmit}
       >
         {() => <>
           <Form>
-            <label htmlFor='email'>e-mail</label>
-            <Field autoComplete="email" name="email" type="email"/>
-            <ErrorMessage name="email">
-              {msg => <span className="error">{msg}</span>}
-            </ErrorMessage>
-            <label htmlFor='password'>Password</label>
+            <label htmlFor='password'>Your new password</label>
             <Field autoComplete="new-password" name="password" type="password"/>
             <ErrorMessage name="password">
               {msg => <span className="error">{msg}</span>}

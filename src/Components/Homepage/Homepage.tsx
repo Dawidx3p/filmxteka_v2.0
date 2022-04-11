@@ -1,7 +1,4 @@
-import GoTrue from "gotrue-js";
-
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Films from "../Films/Films";
 
@@ -15,20 +12,6 @@ type Props = {
 
 const Homepage = ({films, trending}:Props) => {
     const [trendingState, setTrending] = useState('day')
-
-    const navigate = useNavigate();
-
-    const auth = new GoTrue({
-        APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
-        audience: '',
-        setCookie: true,
-    });
-
-    useEffect(() => {
-        if(!auth.currentUser()){
-            navigate('/')
-        }
-    })
 
     return(
         <>
