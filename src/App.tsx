@@ -5,6 +5,7 @@ import Homepage from './Components/Homepage/Homepage';
 import Register from './Components/Register/Register';
 import Remind from './Components/Remind/Remind';
 import Film from './Components/Films/Film';
+import Profile from './Components/MyProfile/MyProfile';
 import Navigation from './Components/Navigation/Navigation';
 import { useEffect, useState } from 'react';
 import { Film as FilmType, Genre } from "./utils/types";
@@ -12,18 +13,21 @@ import { Film as FilmType, Genre } from "./utils/types";
 import { getTheMostPopular, getTrendingWeek, getTrendingDay, getMovieGenres, getTvGenres } from "./utils/tmdb";
 import Login from './Components/Login/Login';
 
-function App() {
-  const initialFilms: FilmType[] | [] = [];
-  const initialGenres: Genre[] | [] = [];
+interface Trending{
+  day: FilmType[];
+  week: FilmType[];
+}
+interface Genres{
+  movie: Genre[];
+  tv: Genre[];
+}
 
+const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const login = () => setLoggedIn(true);
-  const logout = () => setLoggedIn(false);
-
-  const [films, setFilms] = useState(initialFilms);
-  const [trending, setTrending] = useState({day: initialFilms, week: initialFilms});
-  const [genres, setGenres] = useState({movie: initialGenres, tv: initialGenres})
+  const [films, setFilms] = useState<FilmType[]>([]);
+  const [trending, setTrending] = useState<Trending>({day: [], week: []});
+  const [genres, setGenres] = useState<Genres>({movie: [], tv: []})
 
   useEffect(() => {
 
@@ -48,13 +52,14 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navigation logout={logout} loggedIn={loggedIn}/>
+        <Navigation logout={() => setLoggedIn(false)} loggedIn={loggedIn}/>
         <Routes>
-          <Route path='/' element={<Login login={login}/>}/>
+          <Route path='/' element={<Login login={() => setLoggedIn(true)}/>}/>
           <Route path='/homepage' element={<Homepage films={films} trending={trending}/>}/>
           <Route path='/film/:filmId' element={<Film films={films} trending={trending} genres={genres}/>}/>
           <Route path='/register' element={<Register />}/>
           <Route path='/remind' element={<Remind />}/>
+          <Route path='/profile' element={<Profile />}/>
           <Route path='*' element={<Homepage films={films} trending={trending}/>}/>
         </Routes>
       </BrowserRouter>

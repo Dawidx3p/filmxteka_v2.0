@@ -1,23 +1,13 @@
-import GoTrue from "gotrue-js";
 import React, { useEffect, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
+import { auth } from '../../utils/auth'
+import { Error } from '../../utils/types';
+
 type Props = {
   login: () => void;
-}
-
-type Error = {
-  name:string,
-  status:number,
-  json: {
-    error?:string,
-    error_description?:string,
-    code?:number,
-    msg?:string
-  }
 }
 
 const Login = (props:Props) => {
@@ -27,11 +17,6 @@ const Login = (props:Props) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const auth = new GoTrue({
-      APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
-      audience: '',
-      setCookie: true,
-    });
   type InitialValues = {
       email: string,
       password: string
@@ -44,8 +29,9 @@ const Login = (props:Props) => {
 
   const onSubmit = (values: InitialValues ) => {
     setSubmitting(true)
-    auth.login(values.email, values.password)
+    auth.login(values.email, values.password, false)
     .then(response => {
+      console.log(response);
       setMessage('Logged in successfully');
       setSubmitting(false);
       props.login();
@@ -65,37 +51,35 @@ const Login = (props:Props) => {
 
   useEffect(() => {
     if(location.hash.includes('confirmation_token')){
-        auth
-        .confirm(location.hash.slice(20), true)
-        .then(() => {
-            setMessage('Your email address has been successfully confirmed');
-            props.login();
-        })
-        .catch((error:Error) => {
-          if(error.json.error_description){
-            setMessage(error.json.error_description)
-          }else if((error.json.msg)){
-            setMessage(error.json.msg)
-          }else{
-            setMessage('something went wrong')
-          }
-        })
-    }else if(location.hash.includes('recovery_token')){
-        auth
-        .recover(location.hash.slice(16), true)
-        .then((response) => {
+      auth.confirm(location.hash.slice(20), true)
+      .then(() => {
+          setMessage('Your email address has been successfully confirmed');
           props.login();
-          navigate('/remind');
-        })
-        .catch((error:Error) => {
-          if(error.json.error_description){
-            setMessage(error.json.error_description)
-          }else if((error.json.msg)){
-            setMessage(error.json.msg)
-          }else{
-            setMessage('something went wrong')
-          }
-        })
+      })
+      .catch((error:Error) => {
+        if(error.json.error_description){
+          setMessage(error.json.error_description)
+        }else if((error.json.msg)){
+          setMessage(error.json.msg)
+        }else{
+          setMessage('something went wrong')
+        }
+      })
+    }else if(location.hash.includes('recovery_token')){
+      auth.recover(location.hash.slice(16), true)
+      .then((response) => {
+        props.login();
+        navigate('/remind');
+      })
+      .catch((error:Error) => {
+        if(error.json.error_description){
+          setMessage(error.json.error_description)
+        }else if((error.json.msg)){
+          setMessage(error.json.msg)
+        }else{
+          setMessage('something went wrong')
+        }
+      })
     }
   })
   return(

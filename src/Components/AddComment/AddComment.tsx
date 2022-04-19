@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
-import GoTrue from 'gotrue-js';
+
 import { createComment, updateComment } from '../../utils/api';
 import { Comment } from '../../utils/types';
+import { auth } from '../../utils/auth';
 
 type Props = {
     close: () => void;
     filmId: number;
     addComment: (comment: Comment) => void;
-    comments: Comment[]|undefined;
+    comments: Comment[];
     updateCommentInState: (comment: Comment) => void;
 }
 
@@ -18,18 +19,9 @@ type Values = {
 }
 
 const AddComment = (props: Props) => {
-
-    const auth = useMemo(() => {
-        return new GoTrue({
-            APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
-            audience: '',
-            setCookie: true,
-        })
-    },[])
-
     const myComment = useMemo(() => {
-        return props.comments?.find(comment => comment.data.author.email===auth.currentUser()?.email);
-    },[props.comments, auth])
+        return props.comments.find(comment => comment.data.author.email===auth.currentUser()?.email);
+    },[props.comments])
 
     const initialValues = {
         text: '',
@@ -68,7 +60,7 @@ const AddComment = (props: Props) => {
         <Formik
         initialValues={initialValues}
         validationSchema={yup.object({
-            text: yup.string().required('Required').min(30, 'minimum 30 characters'),
+            text: yup.string().required('Required').min(30, 'Review must be at least 30 characters'),
         })}
         onSubmit={onSubmit}
         >

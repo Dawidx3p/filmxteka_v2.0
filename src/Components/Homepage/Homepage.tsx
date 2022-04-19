@@ -5,13 +5,15 @@ import Films from "../Films/Films";
 import { Film } from "../../utils/types";
 import Backdrop from "../Films/Backdrop";
 
-type Props = {
+interface Props {
     films: Film[];
-    trending: { [trending: string]: Film[], day: Film[], week: Film[]}
+    trending: {  day: Film[], week: Film[]}
 }
 
+type TrendingState = 'day' | 'week';
+
 const Homepage = ({films, trending}:Props) => {
-    const [trendingState, setTrending] = useState('day')
+    const [trendingState, setTrending] = useState<TrendingState>('day')
 
     return(
         <>
@@ -22,7 +24,10 @@ const Homepage = ({films, trending}:Props) => {
             </div>
             <div className='films-container'>
                 <h2>Trending</h2>
-                <div><button className={`${trendingState==='day'?'active':''}`} onClick={() => setTrending('day')}>day</button><button  className={`${trendingState==='week'?'active':''}`} onClick={() => setTrending('week')}>week</button></div>
+                <div>
+                    <button className={`${trendingState==='day'?'active':''}`} onClick={() => setTrending('day')}>day</button>
+                    <button  className={`${trendingState==='week'?'active':''}`} onClick={() => setTrending('week')}>week</button>
+                </div>
                 <Backdrop films={trending[trendingState]}/>
             </div>
         </main>

@@ -1,6 +1,7 @@
-import GoTrue from 'gotrue-js';
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+
+import { auth } from '../../utils/auth';
 
 type Props = {
     logout: () => void;
@@ -8,23 +9,14 @@ type Props = {
 }
 
 const Navigation = (props:Props) => {
-
     const navigate = useNavigate();
-    
-    const auth = new GoTrue({
-        APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
-        audience: '',
-        setCookie: true,
-    });
-    
+    const user = auth.currentUser();
     const logout = () => {
-        const user = auth.currentUser();
         if(user){
-            user
-        .logout()
-        .then(response => {
-            console.log("User logged out");
-            navigate('/');
+            user.logout()
+            .then(response => {
+                console.log("User logged out");
+                navigate('/');
         })
         .catch(error => {
             console.log("Failed to logout user: %o", error);
@@ -37,6 +29,9 @@ const Navigation = (props:Props) => {
         <nav className="main">
             <ul>
                 <li><NavLink to='/homepage'>Homepage</NavLink></li>
+                {props.loggedIn && <li>
+                        <NavLink to='/profile'>Profile</NavLink>
+                    </li>}
                 <li>
                     <NavLink 
                     onClick={(e) => {

@@ -1,18 +1,22 @@
-export type Data = {
+export interface Data {
     text: string;
     author: {
       name?: string;
       email: string;
-    },
+    };
 	filmId: number;
     comments?: Data[];
     createdAt?: string;
 	lastModified: string;
   }
   
-  export type Comment = {
-    ref?: {"@ref": { id: string }},
-    data: Data
+  export interface Comment {
+    ref?: {
+		"@ref": { 
+			id: string 
+		}
+	};
+    data: Data;
   }
 
   export interface Film{
@@ -46,4 +50,26 @@ export interface Video{
 	id: string;
 }
 
-export interface Genre {id: number; name: string}
+export interface User{
+	email: string;
+	name: string;
+	imageUrl?: string;
+    bday?: string;
+    description?: string;
+}
+
+export interface Genre {
+	id: number; 
+	name: string;
+}
+
+export interface Error {
+	name:string;
+	status:number;
+	json:{
+		error?:string;
+		error_description?:string;
+		code?:number;
+		msg?:string;
+	}
+}

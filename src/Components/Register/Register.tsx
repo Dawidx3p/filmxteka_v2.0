@@ -1,17 +1,12 @@
 import React, { useState } from "react";
-import GoTrue from 'gotrue-js';
-
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
+
+import { auth } from '../../utils/auth'
 
 const Register = () => {
     const [isSubmitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState('');
-    const auth = new GoTrue({
-        APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
-        audience: '',
-        setCookie: true,
-      });
     type InitialValues = {
         email: string,
         password: string
