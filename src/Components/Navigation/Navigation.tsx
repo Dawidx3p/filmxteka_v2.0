@@ -15,6 +15,7 @@ const Navigation = (props:Props) => {
         if(user){
             user.logout()
             .then(response => {
+                props.logout();
                 console.log("User logged out");
                 navigate('/');
         })
@@ -37,7 +38,6 @@ const Navigation = (props:Props) => {
                     onClick={(e) => {
                         e.preventDefault();
                         if(props.loggedIn){
-                            props.logout();
                             logout();
                         }else{
                             navigate('/')
