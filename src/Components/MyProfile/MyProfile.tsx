@@ -2,17 +2,23 @@ import React, { useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as yup from 'yup'
 
-import { createUser } from "../../utils/api";
+import { User } from '../../utils/types';
+import { createUser, getUserByEmail, updateUser } from "../../utils/api";
 import { auth } from "../../utils/auth";
 
-type Profile = {
+interface Profile{
     name: string,
     bday: string,
     description: string
 }
 
-const MyProfile = () => {
+interface Props{
+  myProfile: User|undefined
+}
+
+const MyProfile = ({myProfile}:Props) => {
     const [isSubmitting, setSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     
     const initialValues:Profile = {
         name: '',
@@ -24,9 +30,19 @@ const MyProfile = () => {
         setSubmitting(true);
         const user = auth.currentUser();
         if(user){
-          createUser({...values, email: user.email})
-          .then(() => setSubmitting(false))
-          .catch(err => console.log(err))
+          getUserByEmail(user.email)
+          .then((users:User[]) => {
+            if(!users.length){
+              createUser({data: {...values, email: user.email}})
+              .then(() => setSubmitting(false))
+              .catch(err => setErrorMessage(err))
+            }else if(users[0].ref){
+              updateUser({data: {...values, email: user.email}}, users[0].ref["@ref"].id)
+              .then(() => setSubmitting(false))
+              .catch(err => setErrorMessage(err))
+            }
+          })
+          
         }
       }
     
@@ -58,6 +74,7 @@ const MyProfile = () => {
                 {msg => <span className="error">{msg}</span>}
             </ErrorMessage>
             <Field name="submit" type="submit" value="Create profile" disabled={isSubmitting}/>
+            {errorMessage}
           </Form>
         </>}
       </Formik>

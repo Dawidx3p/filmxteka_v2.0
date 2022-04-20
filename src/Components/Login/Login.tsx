@@ -4,10 +4,12 @@ import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
 import { auth } from '../../utils/auth'
-import { Error } from '../../utils/types';
+import { Error, User } from '../../utils/types';
+import { getUserByEmail } from "../../utils/api";
 
-type Props = {
-  login: () => void;
+interface Props {
+  login(): void;
+  updateUser(user: User): void;
 }
 
 const Login = (props:Props) => {
@@ -17,9 +19,9 @@ const Login = (props:Props) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  type InitialValues = {
-      email: string,
-      password: string
+  interface InitialValues {
+      email: string;
+      password: string;
   }
   
   const initialValues = {
@@ -31,7 +33,13 @@ const Login = (props:Props) => {
     setSubmitting(true)
     auth.login(values.email, values.password, false)
     .then(response => {
-      console.log(response);
+      getUserByEmail(response.email)
+      .then((users: User[]) => {
+        if(users.length){
+          props.updateUser(users[0])
+        }
+      })
+      .catch(err => console.log(err));
       setMessage('Logged in successfully');
       setSubmitting(false);
       props.login();
@@ -39,6 +47,24 @@ const Login = (props:Props) => {
     })
     .catch((error:Error) => {
       setSubmitting(false)
+      if(error.json.error_description){
+        setMessage(error.json.error_description)
+      }else if((error.json.msg)){
+        setMessage(error.json.msg)
+      }else{
+        setMessage('something went wrong')
+      }
+    })
+  }
+
+  const remindPassword = (e:React.MouseEvent, values: InitialValues) => {
+    e.preventDefault();
+    auth.requestPasswordRecovery(values.email)
+    .then(response => {
+    setMessage('Request sent successfully')
+    navigate('/')
+    })
+    .catch((error:Error) => {
       if(error.json.error_description){
         setMessage(error.json.error_description)
       }else if((error.json.msg)){
@@ -109,24 +135,7 @@ const Login = (props:Props) => {
               e.preventDefault();
               navigate('/register');
           }} disabled={isSubmitting}/>
-          <a onClick={(e) => {
-              e.preventDefault();
-              auth.requestPasswordRecovery(values.email)
-              .then(response => {
-              console.log(JSON.stringify(response));
-              setMessage('Request sent successfully')
-              navigate('/')
-              })
-              .catch((error:Error) => {
-                if(error.json.error_description){
-                  setMessage(error.json.error_description)
-                }else if((error.json.msg)){
-                  setMessage(error.json.msg)
-                }else{
-                  setMessage('something went wrong')
-                }
-              })
-          }} href="/login">Remind password</a>
+          <a onClick={(e) => remindPassword(e, values)} href="/login">Remind password</a>
           <Link to="/homepage">Guest session</Link>
           <div>{message}</div>
         </Form>

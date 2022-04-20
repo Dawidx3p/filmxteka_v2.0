@@ -51,11 +51,18 @@ export interface Video{
 }
 
 export interface User{
-	email: string;
-	name: string;
-	imageUrl?: string;
-    bday?: string;
-    description?: string;
+	ref?: {
+		"@ref": { 
+			id: string 
+		}
+	};
+	data: {
+		email: string;
+		name: string;
+		imageUrl?: string;
+		bday?: string;
+		description?: string;
+	}
 }
 
 export interface Genre {

@@ -10,8 +10,9 @@ exports.handler = (event, context) => {
   }) 
   const data = JSON.parse(event.body);
   const id = getId(event.path);
-  console.log(`Function 'todo-update' invoked. update id: ${id}`);
-  return client.query(q.Update(q.Ref(`classes/articles/${id}`), { data: {...data} }))
+  console.log(data, id)
+  console.log(`Function 'user-update' invoked. update id: ${id}`);
+  return client.query(q.Update(q.Ref(`classes/users/${id}`), { data: data.data}))
     .then((response) => {
       console.log('success', response)
       return {
