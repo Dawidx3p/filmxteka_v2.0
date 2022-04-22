@@ -1,17 +1,18 @@
 import './App.scss';
 import './MyTemplate.scss';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
 import Homepage from './Components/Homepage/Homepage';
 import Register from './Components/Register/Register';
 import Remind from './Components/Remind/Remind';
 import Film from './Components/Films/Film';
 import Profile from './Components/MyProfile/MyProfile';
 import Navigation from './Components/Navigation/Navigation';
-import { useEffect, useState } from 'react';
-import { Film as FilmType, Genre, User } from "./utils/types";
-
-import { getTheMostPopular, getTrendingWeek, getTrendingDay, getMovieGenres, getTvGenres } from "./utils/tmdb";
 import Login from './Components/Login/Login';
+
+import { Film as FilmType, Genre, User } from "./utils/types";
+import { getTheMostPopular, getTrendingWeek, getTrendingDay, getMovieGenres, getTvGenres } from "./utils/tmdb";
 
 interface Trending{
   day: FilmType[];

@@ -3,7 +3,6 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as yup from 'yup'
 
 import { User } from '../../utils/types';
-import { createUser, getUserByEmail, updateUser } from "../../utils/api";
 import { auth } from "../../utils/auth";
 
 interface Profile{
@@ -30,19 +29,15 @@ const MyProfile = ({myProfile}:Props) => {
         setSubmitting(true);
         const user = auth.currentUser();
         if(user){
-          getUserByEmail(user.email)
-          .then((users:User[]) => {
-            if(!users.length){
-              createUser({data: {...values, email: user.email}})
-              .then(() => setSubmitting(false))
-              .catch(err => setErrorMessage(err))
-            }else if(users[0].ref){
-              updateUser({data: {...values, email: user.email}}, users[0].ref["@ref"].id)
-              .then(() => setSubmitting(false))
-              .catch(err => setErrorMessage(err))
-            }
+          user.update({data: {...values}})
+          .then(data => {
+            setSubmitting(false);
+            console.log(data)
           })
-          
+          .catch(err => {
+            setSubmitting(false);
+            setErrorMessage(err)
+          });
         }
       }
     
@@ -73,7 +68,7 @@ const MyProfile = ({myProfile}:Props) => {
             <ErrorMessage name="description">
                 {msg => <span className="error">{msg}</span>}
             </ErrorMessage>
-            <Field name="submit" type="submit" value="Create profile" disabled={isSubmitting}/>
+            <Field name="submit" type="submit" value="Update profile" disabled={isSubmitting}/>
             {errorMessage}
           </Form>
         </>}

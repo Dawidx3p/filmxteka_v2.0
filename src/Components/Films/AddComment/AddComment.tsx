@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
-import { createComment, updateComment } from '../../utils/api';
-import { Comment } from '../../utils/types';
-import { auth } from '../../utils/auth';
+import { createComment, updateComment } from '../../../utils/api';
+import { Comment } from '../../../utils/types';
+import { auth } from '../../../utils/auth';
 
 type Props = {
     close: () => void;
@@ -19,33 +19,48 @@ type Values = {
 }
 
 const AddComment = (props: Props) => {
+    const user = auth.currentUser()
     const myComment = useMemo(() => {
-        return props.comments.find(comment => comment.data.author.email===auth.currentUser()?.email);
-    },[props.comments])
+        if(user){
+            return props.comments.find(comment => comment.data.author.email===user.email);
+        }else{
+            return undefined;
+        }
+    },[props.comments, user])
 
     const initialValues = {
         text: '',
     }
 
     const onSubmit = (values:Values) => {  
-        if(myComment && myComment.ref){
-            updateComment({data: {...values, 
-                author: {email: auth.currentUser()?.email || ''}, 
-                filmId: props.filmId, 
-                lastModified: new Date().toLocaleString()
-            }},myComment.ref['@ref'].id)
+        if(myComment && myComment.ref && user){
+            updateComment({
+                data: {
+                    ...values, 
+                    author: {
+                        email: user.email, 
+                        name: user.user_metadata.name
+                    }, 
+                    filmId: props.filmId, 
+                    lastModified: new Date().toLocaleString()
+            }}, myComment.ref['@ref'].id)
             .then((data: Comment) => {
                 if(data){
                     props.updateCommentInState(data)
                 }
             })
             .catch((err) => console.error(err))
-        }else{
-            createComment({data: {...values, 
-                author: {email: auth.currentUser()?.email || ''}, 
-                filmId: props.filmId, 
-                createdAt: new Date().toLocaleString(), 
-                lastModified: new Date().toLocaleString()
+        }else if(user){
+            createComment({
+                data: {
+                    ...values, 
+                    author: {
+                        email: user.email,
+                        name: user.user_metadata.name
+                    }, 
+                    filmId: props.filmId, 
+                    createdAt: new Date().toLocaleString(), 
+                    lastModified: new Date().toLocaleString()
             }})
             .then((data: Comment) => {
                 if(data){

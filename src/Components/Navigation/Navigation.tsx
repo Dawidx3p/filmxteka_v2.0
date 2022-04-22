@@ -26,6 +26,16 @@ const Navigation = (props:Props) => {
         }
     }
 
+    const changeData = () => {
+        if(user){
+            user.getUserData()
+            .then(data => console.log(data))
+            user.update({data: {surname: 'Pocahontaz'}})
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
+        }
+    }
+
     return(
         <nav className="main">
             <ul>
@@ -44,6 +54,12 @@ const Navigation = (props:Props) => {
                         }
                     }} 
                     to='/'>{props.loggedIn ? 'Logout' : 'Login'}</NavLink>
+                </li>
+                <li>
+                    <NavLink to='/login' onClick={(e) => {
+                        e.preventDefault();
+                        changeData();
+                    }}>Whatever</NavLink>
                 </li>
             </ul>
 

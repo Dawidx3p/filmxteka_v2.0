@@ -1,7 +1,7 @@
-import GoTrue from "gotrue-js";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { auth } from "../../utils/auth";
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
@@ -11,11 +11,6 @@ const Remind = () => {
 
     const navigate = useNavigate();
 
-    const auth = new GoTrue({
-        APIUrl: 'https://filmxteka.netlify.app/.netlify/identity',
-        audience: '',
-        setCookie: true,
-    });
     const user = auth.currentUser();
     type InitialValues = {
         password: string

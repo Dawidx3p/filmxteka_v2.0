@@ -6,7 +6,7 @@ import { getVideos } from '../../utils/tmdb';
 import { Comment, Film as FilmType, Genre, Video as VideoType } from '../../utils/types';
 import { auth } from '../../utils/auth';
 
-import AddComment from '../AddComment/AddComment';
+import AddComment from './AddComment/AddComment';
 import Popup from '../Popup/Popup';
 import Video from './Video';
 import Overview from './Overview';
