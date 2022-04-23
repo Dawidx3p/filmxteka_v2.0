@@ -25,6 +25,7 @@ interface Genres{
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [message, setMessage] = useState('');
 
   const [films, setFilms] = useState<FilmType[]>([]);
   const [trending, setTrending] = useState<Trending>({day: [], week: []});
@@ -34,19 +35,18 @@ const App = () => {
 
     Promise.all([getTheMostPopular(), getTrendingWeek(), getTrendingDay()])
     .then((values: {results: FilmType[]}[]) => {
-      console.log(values)
       setFilms(values[0].results)
       setTrending(prev => ({...prev, week: values[1].results}))
       setTrending(prev => ({...prev, day: values[2].results}))
     })
-    .catch(err => console.log(err));
+    .catch(err => setMessage('error occured during fetching data'));
     
     Promise.all([getMovieGenres(), getTvGenres()])
     .then((values: {genres: Genre[]}[]) => {
       setGenres(prev => ({...prev, movie: values[0].genres}))
       setGenres(prev => ({...prev, tv: values[1].genres}))
     })
-    .catch(err => console.log(err));
+    .catch(err => setMessage('error occured during fetching data'));
 
   },[])
   
@@ -63,6 +63,7 @@ const App = () => {
           <Route path='/profile' element={<Profile/>}/>
           <Route path='*' element={<Homepage films={films} trending={trending}/>}/>
         </Routes>
+        {JSON.stringify(message)}
       </BrowserRouter>
     </div>
   );

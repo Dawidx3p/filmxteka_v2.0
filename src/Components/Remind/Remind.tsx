@@ -22,9 +22,9 @@ const Remind = () => {
             user
             .update({email: user.email, password: values.password})
             .then((user) => {
-                console.log('Updated user %s', user);
-                setSubmitting(false);
-                navigate('/');
+              setMessage('User updated')
+              setSubmitting(false);
+              navigate('/');
             })
             .catch((error:{name:string,status:number,json:{error?:string,error_description?:string,code?:number,msg?:string}}) => {
               setSubmitting(false)

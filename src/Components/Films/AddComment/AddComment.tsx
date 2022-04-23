@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
@@ -19,6 +19,7 @@ type Values = {
 }
 
 const AddComment = (props: Props) => {
+    const [message, setMessage] = useState('')
     const user = auth.currentUser()
     const myComment = useMemo(() => {
         if(user){
@@ -45,11 +46,12 @@ const AddComment = (props: Props) => {
                     lastModified: new Date().toLocaleString()
             }}, myComment.ref['@ref'].id)
             .then((data: Comment) => {
+                setMessage('Comment updated')
                 if(data){
                     props.updateCommentInState(data)
                 }
             })
-            .catch((err) => console.error(err))
+            .catch((err) => setMessage('Error occured while updating comment'))
         }else if(user){
             createComment({
                 data: {
@@ -63,11 +65,12 @@ const AddComment = (props: Props) => {
                     lastModified: new Date().toLocaleString()
             }})
             .then((data: Comment) => {
+                setMessage('Comment created')
                 if(data){
                     props.addComment(data)
                 }
             })
-            .catch((err) => console.error(err))
+            .catch((err) => setMessage('Error occured while creating comment'))
         }
     }
 
@@ -90,6 +93,7 @@ const AddComment = (props: Props) => {
                     {msg => <span className="error">{msg}</span>}
                 </ErrorMessage>
                 <Field className="success" name="submit" type="submit"/>
+                {message}
             </Form>}
         </Formik>
     )

@@ -18,11 +18,9 @@ const Navigation = (props:Props) => {
             user.logout()
             .then(response => {
                 props.logout();
-                console.log("User logged out");
                 navigate('/');
         })
         .catch(error => {
-            console.log("Failed to logout user: %o", error);
             throw error;
         });
         }

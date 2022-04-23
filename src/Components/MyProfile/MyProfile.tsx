@@ -15,7 +15,7 @@ interface Profile{
 
 const MyProfile = () => {
     const [isSubmitting, setSubmitting] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [message, setMessage] = useState('');
     const [comments, setComments] = useState<Comment[]>([])
 
     const user = auth.currentUser();
@@ -28,18 +28,17 @@ const MyProfile = () => {
     }
 
     const onSubmit = (values: Profile ) => {
-      console.log(values)
       setSubmitting(true);
       const user = auth.currentUser();
       if(user){
         user.update({data: {...values}})
         .then(data => {
+          setMessage('user updated')
           setSubmitting(false);
-          console.log(data)
         })
         .catch(err => {
           setSubmitting(false);
-          setErrorMessage(err)
+          setMessage('error occured during user update')
         });
       }
     }
@@ -83,7 +82,7 @@ const MyProfile = () => {
                 {msg => <span className="error">{msg}</span>}
             </ErrorMessage>
             <Field name="submit" type="submit" value="Update profile" disabled={isSubmitting}/>
-            {errorMessage}
+            {message}
           </Form>
         </>}
       </Formik>
