@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as yup from 'yup'
 
-import { User } from '../../utils/types';
 import { auth } from "../../utils/auth";
+import { getCommentsByEmail } from "../../utils/api";
+import { Comment } from "../../utils/types";
+import { useNavigate } from "react-router-dom";
 
 interface Profile{
     name: string,
@@ -11,37 +13,49 @@ interface Profile{
     description: string
 }
 
-interface Props{
-  myProfile: User|undefined
-}
-
-const MyProfile = ({myProfile}:Props) => {
+const MyProfile = () => {
     const [isSubmitting, setSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    
+    const [comments, setComments] = useState<Comment[]>([])
+
+    const user = auth.currentUser();
+    const navigate = useNavigate();
+
     const initialValues:Profile = {
-        name: '',
-        bday: '',
-        description: ''
+      name: '',
+      bday: '',
+      description: ''
+    }
+
+    const onSubmit = (values: Profile ) => {
+      console.log(values)
+      setSubmitting(true);
+      const user = auth.currentUser();
+      if(user){
+        user.update({data: {...values}})
+        .then(data => {
+          setSubmitting(false);
+          console.log(data)
+        })
+        .catch(err => {
+          setSubmitting(false);
+          setErrorMessage(err)
+        });
       }
-      const onSubmit = (values: Profile ) => {
-        console.log(values)
-        setSubmitting(true);
-        const user = auth.currentUser();
-        if(user){
-          user.update({data: {...values}})
-          .then(data => {
-            setSubmitting(false);
-            console.log(data)
-          })
-          .catch(err => {
-            setSubmitting(false);
-            setErrorMessage(err)
-          });
-        }
+    }
+
+    useEffect(() => {
+      if(user){
+        getCommentsByEmail(user.email)
+        .then((data: Comment[]) => {
+          setComments(data)
+        })
       }
+    },[user])
+
     
     return(
+      <main>
         <Formik 
         initialValues={initialValues}
         validationSchema={yup.object({
@@ -73,6 +87,19 @@ const MyProfile = ({myProfile}:Props) => {
           </Form>
         </>}
       </Formik>
+      <div>
+        <h1>Comments</h1>
+        {comments.map((comment, key) => <div>
+          <h4>{comment.data.author.name || comment.data.author.email}</h4>
+          <p>{comment.data.text}</p>
+          <button onClick={() => {
+            navigate(`/film/${comment.data.filmId}`)
+          }} className="primary">Go to movie</button>
+        </div>)}
+        {!comments.length && "no comments yet"}
+      </div>
+      </main>
+
     )
 }
 

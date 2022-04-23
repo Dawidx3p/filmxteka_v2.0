@@ -85,3 +85,19 @@ button.active{
         }
     }
 }
+
+.recommendations{
+    display: inline-flex;
+    overflow: scroll;
+    grid-column-end: span 2;
+    height: 15rem;
+    img{
+        width: auto;
+        height: 100%;
+    }
+    @media only screen and (max-width: t.$max-width-screen) {
+        &{
+            grid-column-end:auto;
+        }
+    }
+}

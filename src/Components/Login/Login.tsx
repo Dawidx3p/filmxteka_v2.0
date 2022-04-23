@@ -4,12 +4,10 @@ import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as yup from 'yup'
 
 import { auth } from '../../utils/auth'
-import { Error, User } from '../../utils/types';
-import { getUserByEmail } from "../../utils/api";
+import { Error } from '../../utils/types';
 
 interface Props {
   login(): void;
-  updateUser(user: User): void;
 }
 
 const Login = (props:Props) => {
@@ -33,13 +31,6 @@ const Login = (props:Props) => {
     setSubmitting(true)
     auth.login(values.email, values.password, false)
     .then(response => {
-      getUserByEmail(response.email)
-      .then((users: User[]) => {
-        if(users.length){
-          props.updateUser(users[0])
-        }
-      })
-      .catch(err => console.log(err));
       setMessage('Logged in successfully');
       setSubmitting(false);
       props.login();

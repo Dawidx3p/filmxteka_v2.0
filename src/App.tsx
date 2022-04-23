@@ -11,7 +11,7 @@ import Profile from './Components/MyProfile/MyProfile';
 import Navigation from './Components/Navigation/Navigation';
 import Login from './Components/Login/Login';
 
-import { Film as FilmType, Genre, User } from "./utils/types";
+import { Film as FilmType, Genre } from "./utils/types";
 import { getTheMostPopular, getTrendingWeek, getTrendingDay, getMovieGenres, getTvGenres } from "./utils/tmdb";
 
 interface Trending{
@@ -29,7 +29,6 @@ const App = () => {
   const [films, setFilms] = useState<FilmType[]>([]);
   const [trending, setTrending] = useState<Trending>({day: [], week: []});
   const [genres, setGenres] = useState<Genres>({movie: [], tv: []})
-  const [myProfile, setMyProfile] = useState<User>();
 
   useEffect(() => {
 
@@ -56,12 +55,12 @@ const App = () => {
       <BrowserRouter>
         <Navigation logout={() => setLoggedIn(false)} loggedIn={loggedIn}/>
         <Routes>
-          <Route path='/' element={<Login updateUser={(user: User) => setMyProfile(user)} login={() => setLoggedIn(true)}/>}/>
+          <Route path='/' element={<Login login={() => setLoggedIn(true)}/>}/>
           <Route path='/homepage' element={<Homepage films={films} trending={trending}/>}/>
           <Route path='/film/:filmId' element={<Film films={films} trending={trending} genres={genres}/>}/>
           <Route path='/register' element={<Register />}/>
           <Route path='/remind' element={<Remind />}/>
-          <Route path='/profile' element={<Profile myProfile={myProfile}/>}/>
+          <Route path='/profile' element={<Profile/>}/>
           <Route path='*' element={<Homepage films={films} trending={trending}/>}/>
         </Routes>
       </BrowserRouter>

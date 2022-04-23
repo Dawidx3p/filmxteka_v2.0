@@ -146,6 +146,7 @@ form{
     border-radius: 0.5rem;
     box-shadow: $box-shadow;
     margin: $margin;
+    justify-content: center;
     input, textarea, select{
         box-shadow: $box-shadow;
         background-color: $grey;
@@ -163,6 +164,8 @@ form{
         border-radius: 2rem;
         cursor: pointer;
         transition: $transition-duration;
+        width: min-content;
+        justify-self: center;
         &:hover{
             filter:invert(100%)
         }
